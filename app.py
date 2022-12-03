@@ -1,5 +1,5 @@
 import streamlit as st
-
+import random
 st.title('Hackathon App Title Here')
 
 # Streamlit run app.py
@@ -32,7 +32,17 @@ with col2:
     show_checkbox = False
     st.checkbox('Place 1', value=False, key='joe 1')
 
+    # if key:
+    #
+    #     button1 = st.checkbox('Box 1', value=False, key='True')
+    #     button2 = st.checkbox('Box 2', value=False, key='True')
+    #     button3 = st.checkbox('Box 3', value=False, key='True')
+    #     button4 = st.checkbox('Box 4', value=False, key='True')
+    #     button5 = st.checkbox('Box 5', value=False, key='True')
+    #     button6 = st.checkbox('Box 6', value=False, key='True')
+    #     button7 = st.checkbox('Box 7', value=False, key='True')
 
-# checkbox1 = st.checkbox('Default', value=True, key='Default')
+
+
 
 
