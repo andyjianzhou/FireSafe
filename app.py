@@ -29,7 +29,9 @@ def autocomplete(parameters, API_KEY):
 
 
 col1, col3, col2 = st.columns(3, gap='large')
+
 total_images = []
+location = []
 def load_image(image_path):
     image = Image.open(image_path)
     width, height = image.size
@@ -38,22 +40,28 @@ def load_image(image_path):
 with col1:
     st.write('')
 
-    location = st.text_input('Enter your location', value='')
-
-    uploaded_file = st.file_uploader("Choose a file", ['png', 'jpg'], True, label_visibility='collapsed')
-    LABELS = ['Mali', 'Ethiopia', 'Malawi', 'Nigeria']
-    # display image
-    if uploaded_file is not None:
-        #image path
-        for uploaded_file in uploaded_file:
-            image, width, height = load_image(uploaded_file)
-            total_images.append(image)
-            st.image(image, caption='Uploaded Image.', use_column_width=True)
-            st.write("")
-            st.write("Classifying...")
-            label = random.choice(LABELS)
-            st.write(label)
-            st.write("")
+    # input react js code here
+    location = st.text_input('Enter Location')
+    if location.casefold() == 'Gaskell Rd, Rosamond'.casefold():
+        st.write("Location found!")
+        st.write("Location is" + "21505 Gaskell Rd, Rosamond, CA 93560, United States")
+        
+    if location:
+        st.write("Input image for location")
+        uploaded_file = st.file_uploader("Choose a file", ['png', 'jpg'], True, label_visibility='collapsed')
+        LABELS = ['Mali', 'Ethiopia', 'Malawi', 'Nigeria']
+        # display image
+        if uploaded_file is not None:
+            #image path
+            for uploaded_file in uploaded_file:
+                image, width, height = load_image(uploaded_file)
+                total_images.append(image)
+                st.image(image, caption='Uploaded Image.', use_column_width=True)
+                st.write("")
+                st.write("Classifying...")
+                label = random.choice(LABELS)
+                st.write(label)
+                st.write("")
 
 with col2:
     st.write('')
@@ -62,11 +70,3 @@ with col2:
     if total_images:
         for i in range(len(total_images)):
             st.checkbox(str(i))
-    # button1 = st.checkbox('Active Location 1', value=False, key='Check1', disabled=False)
-    # button2 = st.checkbox('Active Location 2', value=False, key='Check2', disabled=False)
-    # button3 = st.checkbox('Active Location 3', value=False, key='Check3', disabled=False)
-    # button4 = st.checkbox('Active Location 4', value=False, key='Check4', disabled=False)
-    # button5 = st.checkbox('Active Location 5', value=False, key='Check5', disabled=False)
-    # button6 = st.checkbox('Active Location 6', value=False, key='Check6', disabled=False)
-    # button7 = st.checkbox('Active Location 7', value=False, key='Check7', disabled=False)
-    # button8 = st.checkbox('Active Location 8', value=False, key='Check8', disabled=False)
