@@ -5,9 +5,7 @@ st.write('This is a frog bro what')
 
 button = st.button('Log In')
 
-if button:
-    st.write('Redirecting..')
-
+st.file_uploader("Insert something here")
 
 # Streamlit run app.py
 
