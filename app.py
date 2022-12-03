@@ -2,21 +2,35 @@ import streamlit as st
 import random
 from streamlit.components.v1 import html
 
+page_bg_img = """
+<style>
+[data-testid='stAppViewContainer"] {
+background-color: #e5
+}
+</style>
+"""
+
+st.markdown(page_bg_img, unsafe_allow_html=True)
 st.title('Hackathon App Title Here')
 
 
 # Streamlit run app.py
 
 
-col1, col2 = st.columns(2)
+col1, col2 = st.columns(2, gap='large')
+
 with col1:
-    st.header('Image Drop')
-    uploaded_file = st.file_uploader("Choose a file", ['png', 'img'], True)
+    st.write('')
+
+    st.subheader('Edit Text')
+    uploaded_file = st.file_uploader("Choose a file", ['png', 'img'], True, label_visibility='collapsed')
     # LABEL
 
 
 with col2:
-    col2.header('Locations')
+    st.write('')
+
+    col2.subheader('Locations')
     show_checkbox = False
     st.checkbox('Place 1', value=False, key='joe 1')
 
