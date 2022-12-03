@@ -4,6 +4,7 @@ from streamlit.components.v1 import html
 from PIL import Image
 import requests
 import json
+import pprint
 
 page_bg_img = """
 <style>
@@ -23,15 +24,18 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 st.title('Hackathon App Title Here')
 
-
+API_KEY = 'd40f2850435a4ea88e5c1d3736182c61'
 def autocomplete(parameters, API_KEY):
-    get_URL = f"https://maps.googleapis.com/maps/api/place/autocomplete/output?{parameters}&key={API}"
+    get_URL = f"https://api.geoapify.com/v1/geocode/search?name={parameters}apiKey={API_KEY}"
+    response = requests.get(get_URL)
+    data = response.json()
+    pprint.pprint(data)
 
-
+autocomplete('Gaskell Rd, Rosamond', API_KEY)
 col1, col3, col2 = st.columns(3, gap='large')
 
+
 total_images = []
-location = []
 def load_image(image_path):
     image = Image.open(image_path)
     width, height = image.size
@@ -45,7 +49,6 @@ with col1:
     if location.casefold() == 'Gaskell Rd, Rosamond'.casefold():
         st.write("Location found!")
         st.write("Location is" + "21505 Gaskell Rd, Rosamond, CA 93560, United States")
-        
     if location:
         st.write("Input image for location")
         uploaded_file = st.file_uploader("Choose a file", ['png', 'jpg'], True, label_visibility='collapsed')
