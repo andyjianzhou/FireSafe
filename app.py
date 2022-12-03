@@ -2,8 +2,6 @@ import streamlit as st
 
 st.title('Hackathon App Title Here')
 
-
-
 # Streamlit run app.py
 
 
