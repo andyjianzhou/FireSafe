@@ -5,7 +5,7 @@ from PIL import Image
 import requests
 import json
 import pprint
-from models import utils
+from models.effnetutils import get_predictions, torch_to_pil
 page_bg_img = """
 <style>
 [data-testid='stAppViewContainer"] {
