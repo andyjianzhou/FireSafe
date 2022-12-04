@@ -6,6 +6,13 @@ import requests
 import json
 import pprint
 from models.effnetutils import get_predictions, torch_to_pil
+from win10toast import ToastNotifier
+import time
+def notify(title, message):
+    toaster = ToastNotifier()
+    toaster.show_toast(title, message, icon_path=None, duration=5, threaded=True)
+    time.sleep(0.01)
+
 page_bg_img = """
 <style>
 [data-testid='stAppViewContainer"] {
@@ -78,7 +85,7 @@ with col1:
     if location:
         st.write("Input image for location")
         uploaded_file = st.file_uploader("Choose a file", ['png', 'jpg'], True, label_visibility='collapsed')
-        LABELS = ['Not secluded', 'Secluded']
+        LABELS = ['Non secluded', 'Secluded']
         # display image
         if uploaded_file is not None:
             #image path
@@ -96,11 +103,11 @@ with col1:
                             accuracy.append(probability[i])
                     st.image(img, use_column_width=True)
                     # format f string to 3 decimal places
-                    st.warning(f"Secluded area detected! Detected with an accuracy of: {round(int(accuracy[0]*100), 4)}%")
+                    st.success(f"Secluded area detected! Detected with an accuracy of: {round(int(probability[0]*100), 4)}%")
                     total_images.append(image)
                 else:
                     st.image(img, use_column_width=True)
-                    st.success("Not secluded area detected!")
+                    st.success(f"{LABELS[0]} area, search for other places, accuracy of {round(int(probability[0]*100), 4)}%")
                 # get predictions
                 st.write("")
 
@@ -113,3 +120,4 @@ with col2:
     if total_images:
         for i in range(len(total_images)):
             st.checkbox(f"Area {str(i+1)}")
+            notify("FireSafe", "Secluded area detected! Users near this location has been detected")

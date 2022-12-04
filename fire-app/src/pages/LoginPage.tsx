@@ -22,7 +22,7 @@ const LoginPage = () => {
                     <div className="login-cover">
                         <h1>Login</h1>
                         <input type="text" placeholder="Name..." />
-                        <input type="text" placeholder="Last Name..." />
+                        <input type="text" placeholder="Address..." />
                         <input type="password" placeholder="Password..." />
                         <input type="tel" placeholder="Phone..." />
                         
