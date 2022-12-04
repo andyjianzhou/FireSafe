@@ -5,7 +5,7 @@ from PIL import Image
 import requests
 import json
 import pprint
-
+from models import utils
 page_bg_img = """
 <style>
 [data-testid='stAppViewContainer"] {
@@ -25,8 +25,8 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 background_img = '''
 <style>
     .stApp {
-        background-image: url("https://cdn.dribbble.com/users/2272349/screenshots/7207200/ocean-guardian-pulse-loop-by-the-sound-of-breaking-glass.gif");
-        background-size: cover;
+        background-image: url("https://i.gifer.com/LSsW.gif");
+        background-size: 70%;
     }
 </style>
 '''

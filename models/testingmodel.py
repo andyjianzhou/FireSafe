@@ -1,7 +1,7 @@
 # This Python 3 environment comes with many helpful analytics libraries installed
 # It is defined by the kaggle/python Docker image: https://github.com/kaggle/docker-python
 # For example, here's several helpful packages to load
-!pip install -q efficientnet_pytorch
+# !pip install -q efficientnet_pytorch
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 from tqdm.autonotebook import tqdm
@@ -30,6 +30,7 @@ from numba import jit
 # xml library for parsing xml files
 from xml.etree import ElementTree as et
 import cv2
+from sklearn.metrics import roc_auc_score
 
 import os
 import os.path
@@ -99,6 +100,28 @@ val_df['Label'] = val_df['Label'].astype(int)
 
 print(train_df)
 print(val_df)
+
+class Net(nn.Module):
+    def __init__(self, num_classes):
+        super().__init__()
+        self.model = EfficientNet.from_pretrained('efficientnet-b4')
+        self.dense_output = nn.Linear(1280, num_classes)
+
+
+    def forward(self, x):
+        feat = self.model.extract_features(x)
+        feat = F.avg_pool2d(feat, feat.size()[2:]).reshape(-1, 1280)
+        return self.dense_output(feat)
+
+
+def macro_multilabel_auc(label, pred):
+    aucs = []
+    for i in range(len(CFG.FOLDER_NAMES)):
+        aucs.append(roc_auc)
+    print(np.round(aucs, 4))
+    return np.mean(aucs)
+
+
 class LandDataset(torch.utils.data.Dataset):
     def __init__(self, df, width, height, transforms=None):
         self.df = df
@@ -134,33 +157,33 @@ img, target = dataset[15]
 print('Image shape = ', img.shape, '\n','Target - ', target)
 print(label)
 
+# output = torch.argmax(outputs, dim=1)
 
+device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+num_classes = 4
+model = Net(num_classes)
 def train_one_epoch(num_epochs, train_loader, model, device, optimizer, criterion):
-    loader = tqdm(train_loader, total=len(train_loader))
     summary_loss = AverageMeter()
     model.train()
     i = 0    
     epoch_loss = 0
+    loader = tqdm(train_loader, total=len(train_loader))
     for imgs, labels in loader:
         i += 1
 #         imgs = [torch.stack(img).to(device, dtype=torch.float) for img in imgs]
         imgs = torch.stack(imgs).to(device, dtype=torch.float)
-        #label is a tuple and a ndarray
-        #convert labels to tensor
         labels = torch.tensor(labels).to(device, dtype=torch.long)
-        labels = torch.stack(labels)
-    
-        
-        outputs = model(imgs)
-        loss_dict = criterion(outputs, labels)
-        loss = sum(loss for loss in loss_dict.values())
         optimizer.zero_grad()
+        outputs = model(imgs)
+
+        
+
+        loss = criterion(outputs, labels)
         loss.backward()
         summary_loss.update(loss.detach().item(), CFG.TRAIN_BS)
         optimizer.step() 
         
-#         print(f'Iteration: {i}/{len(loader)}, Loss: {losses}')
-#         epoch_loss += losses.item()
+
     print(f'Loss after epoch {num_epochs+1} = ',summary_loss.avg)
     return summary_loss.avg
     
@@ -168,25 +191,117 @@ def val_one_epoch(num_epochs, val_loader, model, device, optimizer, criterion):
     model.eval()
     epoch_loss = 0
     loader = tqdm(val_loader, total=len(val_loader))
-#     summary_losses = AverageMeter()
-    eval_scores = EvalMeter()
+    label_val, preds = [], []
+#     eval_scores = EvalMeter()
+    running_loss = 0
     for imgs, labels in loader:
-        imgs = imgs.to(device)
-        labels = labels.to(device)
+        imgs = torch.stack(imgs).to(device, dtype=torch.float)
+        labels = torch.tensor(labels).to(device, dtype=torch.long)
         outputs = model(imgs)
+        # 
         
-        for i, image in enumerate(imgs):
-
-            scores = outputs[i]['scores'].detach().cpu().numpy()
-            
-            preds_sorted_idx = np.argsort(scores)[::1]
+        running_loss += loss.item()
+        val_preds = torch.argmax(outputs, 1).detach().cpu().numpy()
+        val_y = labels.detach().cpu().numpy()
         
-        #Uncomment for mode.train() evaluation if you want loss only
-#         losses = sum(loss for loss in loss_val_dict.all())
-#         summary_losses.update(summary_losses.item(), CFG.VAL_BS)
-    print("Precision is: ", eval_scores.avg)
+        label_val += [val_y]
+        preds += [val_preds]
+        
+        valid_pbar_desc = f"loss: {loss.item():.4f}"
+        loader.set_description(desc=valid_pbar_desc)
+#         
+    final_loss_val = running_loss/len(loader)
 #     print('Validation loss = ', summary_losses.avg)
-    return eval_scores.avg
+    return final_loss_val
                 
 #                 prediction = model([img.to(device)])[0]
+
+def engine():
+# to train on gpu if selected.
+#     num_classes = 4
+    # get the model using our helper function
+#     model = get_model_instance_segmentation(num_classes)
+    num_epochs = CFG.EPOCHS
+    # move model to the right device
+    model.to(device)
+    
+
+
+    # parameters construct an optimizer
+    params = [p for p in model.parameters() if p.requires_grad]
+    optimizer = torch.optim.SGD(params, lr=0.005,
+                                    momentum=0.9, weight_decay=0.0005)
+    # and a learning rate scheduler which decreases the learning rate by
+    # 10x every 3 epochs
+    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer,
+                                                   step_size=3,
+                                                   gamma=0.1)
+    criterion = nn.CrossEntropyLoss()
+    precision_max = 0.940
+    loss_min=99999
+    loss = []
+    # insert train_one_epoch and val_one_epoch
+    for epochs in range(num_epochs):
+        print(f"============Epoch: {epochs+1}============")
+        losses_train = train_one_epoch(epochs, data_loader, model, device, optimizer, criterion)
+        losses_val = val_one_epoch(epochs, val_data_loader, model, device, optimizer, criterion)
+        loss.append(losses_val)
+        
+        if losses_val < loss_min:
+            PATH = f'./FasterRCNN_epoch_bestLosses.pt'
+            torch.save({
+                'epoch':epochs,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'loss': losses_val
+            }, PATH)
+            print(f'Best loss found in {epochs+1}, with loss of {losses_val}... saving model to {PATH}')
+            loss_min = losses_val
+                  
+#         if precision_val > precision_max:
+#             PATH = f'./FasterRCNN_epoch_bestPrecision.pt'
+#             torch.save({
+#                 'epoch':epochs,
+#                 'model_state_dict': model.state_dict(),
+#                 'optimizer_state_dict': optimizer.state_dict(),
+#                 'loss': losses_val
+#             }, PATH)
+#             print(f'Best precision found in {epochs+1}, with precision of {precision_val}... saving model to {PATH}')
+#             precision_max = precision_val
+        
+#         if losses_val < loss_min and precision_val < precision_max:
+#             PATH = f'./FasterRCNN_epoch_bestModel.pt'
+#             torch.save({
+#                 'epoch':epochs,
+#                 'model_state_dict': model.state_dict(),
+#                 'optimizer_state_dict': optimizer.state_dict(),
+#                 'loss': losses_val
+#             }, PATH)
+#             print(f'Best overall score found in {epochs+1}, with loss of {losses_val}, and precision is {precision_val}... saving model to {PATH}')
+#             precision_max = precision_val
+#             loss_min = losses_val
+        
+        torch.cuda.empty_cache()
+
+engine()
+
+#see images
+model.eval()
+for i in range(10):
+    img, target = dataset[i]
+    img = img.unsqueeze(0)
+    img = img.to(device)
+    with torch.no_grad():
+        prediction = model(img)
+    img = img.squeeze(0)
+    img = img.permute(1,2,0)
+    img = img.cpu().numpy()
+    plt.figure(figsize=(16,8))
+    plt.axis('off')
+    plt.imshow(img)
+    plt.show()
+    print(target)
+
+
+
 
