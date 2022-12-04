@@ -22,17 +22,6 @@ st.markdown("""
         """, unsafe_allow_html=True)
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
-background_img = '''
-<style>
-    .stApp {
-        background-image: url("https://cdn.dribbble.com/users/2272349/screenshots/7207200/ocean-guardian-pulse-loop-by-the-sound-of-breaking-glass.gif");
-        background-size: cover;
-    }
-</style>
-'''
-
-st.markdown(background_img, unsafe_allow_html=True)
-
 st.title('Hackathon App Title Here')
 
 API_KEY = 'd40f2850435a4ea88e5c1d3736182c61'
