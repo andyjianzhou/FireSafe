@@ -32,8 +32,13 @@ background_img = '''
 '''
 
 st.markdown(background_img, unsafe_allow_html=True)
+class CFG:
+    PATH = 'models/Efnetb0BestLosses.pt'
+    width = 500
+    height = 500
+    num_classes = 4
 
-st.title('Hackathon App Title Here')
+st.title('FireSafe')
 
 API_KEY = 'd40f2850435a4ea88e5c1d3736182c61'
 def autocomplete(parameters, API_KEY):
@@ -73,18 +78,30 @@ with col1:
     if location:
         st.write("Input image for location")
         uploaded_file = st.file_uploader("Choose a file", ['png', 'jpg'], True, label_visibility='collapsed')
-        LABELS = ['Mali', 'Ethiopia', 'Malawi', 'Nigeria']
+        LABELS = ['Not secluded', 'Secluded']
         # display image
         if uploaded_file is not None:
             #image path
             for i, uploaded_file in enumerate(uploaded_file):
                 image, width, height = load_image(uploaded_file)
-                total_images.append(image)
-                st.image(image, caption= i+1, use_column_width=True)
-                st.write("")
+                img, preds, probability = get_predictions(image, CFG.width, CFG.height, CFG.PATH)
+                print(type(img))
                 st.write("Classifying...")
-                label = random.choice(LABELS)
-                st.write(label)
+                # convert tensor image to PIL image
+                if 1 in preds:
+                    #find accuracy
+                    accuracy = []
+                    for i in range(len(preds)):
+                        if preds[i] == 1:
+                            accuracy.append(probability[i])
+                    st.image(img, use_column_width=True)
+                    # format f string to 3 decimal places
+                    st.warning(f"Secluded area detected! Detected with an accuracy of: {round(int(accuracy[0]*100), 4)}%")
+                    total_images.append(image)
+                else:
+                    st.image(img, use_column_width=True)
+                    st.success("Not secluded area detected!")
+                # get predictions
                 st.write("")
 
 with col2:
@@ -95,4 +112,4 @@ with col2:
         col2.header("No location found")
     if total_images:
         for i in range(len(total_images)):
-            st.checkbox(str(i+1))
+            st.checkbox(f"Area {str(i+1)}")

@@ -27,7 +27,7 @@ from numba import jit
 from xml.etree import ElementTree as et
 import cv2
 from sklearn.metrics import roc_auc_score
-
+import torchvision.transforms as T
 import os
 import os.path
 from os import path
@@ -47,14 +47,16 @@ class LandDataset(torch.utils.data.Dataset):
     return len(self.imgs)
 
   def __getitem__(self, idx):
+    #convert PIL image to opencv image
+    # img = self.imgs
+    # img = np.array(img)
     img = convert_from_image_to_cv2(self.imgs)
-    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB).astype(np.float32)
-    img_res = cv2.resize(img_rgb, (self.width, self.height), cv2.INTER_AREA)
-    img_res /= 255.0
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = cv2.resize(img, (self.width, self.height)).astype(np.float32)
+    img /= 255.0
     if self.transforms:
-        transforms = self.transforms(image = img_res) 
+        transforms = self.transforms(image = img) 
         img_res = transforms['image']
-    # print("after transforms: ", img_res.shape)
     return img_res
 
 def convert_from_image_to_cv2(img: Image) -> np.ndarray:
@@ -71,27 +73,56 @@ class Net(nn.Module):
         feat = self.model.extract_features(x)
         feat = F.avg_pool2d(feat, feat.size()[2:]).reshape(-1, 1280)
         return self.dense_output(feat)
+def get_transform(train):
+    
+    if train:
+        return A.Compose([
+                            #A.HorizontalFlip(0.5),
+                            #A.RandomBrightnessContrast(p=0.2),
+                            #A.ShiftScaleRotate(shift_limit=0.2, scale_limit=0.2, rotate_limit=30, p=0.5),
+                     # ToTensorV2 converts image to pytorch tensor without div by 255
+                            ToTensorV2(p=1.0) 
+                        ],)
+    else:
+        return A.Compose([
+                            ToTensorV2(p=1.0)
+                        ],)
+        
+def threshold(output):
+    print("Thresholding")
+    output = torch.sigmoid(output) # sigmoid function to convert to probability values to be between 0 and 1
+    probability = output
+    print(output)
+    output = output.cpu().detach().numpy()
+    output = np.where(output > 0.999, 1, 0)
+    return output, probability
+def torch_to_pil(img):
+    # img is a torch tensor, convert to PIL image
+    print(type(img))
+    return transforms.ToPILImage()(img).convert('RGB')
+
 
 def get_predictions(image, width, height, model_path):
-    model_path =  '' #insert path to model
-    num_classes = 4
-    model = Net(num_classes)
+    LABELS = ['Mali', 'Ethiopia', 'Malawi', 'Nigeria']
+    model_path =  model_path #insert path to model
+    model = Net(len(LABELS))
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     model.load_state_dict(torch.load(model_path, map_location=device)['model_state_dict'])
+    print("Model loaded")
 
     model.eval()
     model.to(device)
 
-    imgs = LandDataset(image, width, height, transforms = None)
-    imgs = imgs[0]
-    imgs = imgs.to(device)
-    output = model(imgs)
-    output = output[0]
-
-    return imgs, output
-
-def torch_to_pil(img):
-    print("Converting to PIL image")
-    return transforms.ToPILImage()(img).convert('RGB')
+    imgs = LandDataset(image, width, height, transforms = get_transform(False))
+    img = imgs[0]
+    img = img.unsqueeze(0)
+    img = img.to(device)
+    output = model(img)[0]
+    # output = output.cpu().detach().numpy()
+    output, probability = threshold(output)
+    print("Output: ", output) # the array contents the probability of each class
+    img = torch_to_pil(img[0]) #convert to PIL image
+    return img, output, probability
+    
 def convert_from_image_to_cv2(img: Image) -> np.ndarray:
     return cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
