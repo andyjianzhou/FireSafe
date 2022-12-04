@@ -16,7 +16,7 @@ function App() {
             <video src={videoBg} autoPlay loop muted/>
             <div className="content">
                 <h1>
-                    FireApp
+                    FireSafe
                 </h1>
                 <p>
                 Always be safe, wherever you are, whatever you do.
