@@ -22,7 +22,7 @@ display: block;
 justify-content: center;
 align-items: center;
 height: 60vh;
-width: 50vw;
+width: 25vw;
 box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 border-radius: 15px;
 margin: 5% auto;

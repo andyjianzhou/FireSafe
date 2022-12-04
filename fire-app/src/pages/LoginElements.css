@@ -1,0 +1,115 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Verdana', sans-serif;
+    
+}
+
+@font-face {
+    font-family: 'Verdana';
+    /* modern font */
+    src: url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+}
+
+.page {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-cover {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    /* Add gap */
+    gap: 20px;
+
+}
+
+.alt-login{
+    width: 80%;
+    height: 3em;
+    display: flex;
+    /* gap: 20px; */
+    justify-content: space-between;
+
+}
+
+.alt-login div {
+    width: 45%;
+    height: 95%;
+    border-radius: 0.25em;
+    background-color: black;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.google {
+    background-image: url("https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg");
+}
+
+.facebook {
+    background-image: url("../facebook.png");
+}
+
+input {
+    /* add bold border */
+    border: 1px solid black;
+    border-radius: 0.25em;
+    padding: 0.5em;
+    width: 80%;
+    height: 2em;
+    font-size: 1.2em;
+}
+input:focus {
+    outline-color: rgb(0, 0, 0);
+}
+
+.login-btn {
+    width: 40%;
+    height: 2em;
+    border-radius: 0.25em;
+    background-color: rgb(221, 109, 109);
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.login-btn:hover {
+    transform: scale(1.1);
+
+}
+
+.text {
+    position: relative;
+    bottom:-1em;
+}
+
+.hide {
+    position: absolute;
+    transform:scale(0)
+}
+
+.login-popup {
+    position:absolute;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 0.25em;
+    background-color: rgb(149, 216, 93);
+    color: white;
+    bottom: 0;
+    transform: scale(1);
+    transform: translateY(100%);
+
+
+}
