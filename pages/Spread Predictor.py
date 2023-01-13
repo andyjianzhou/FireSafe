@@ -56,10 +56,11 @@ df = pd.DataFrame(
 #create drop down
 option = st.selectbox('How did it start', ['Select', 'Lightning', 'Smoking', 'Campire', 'Debris', 'Railroad', 'Powerline', 'Structure', 'Equipment'])
 if option and not option == 'Select':
-    time.sleep(1)
+    time.sleep(3)
     st.write(f'You selected: {option}')
     if option == 'Lightning':
         st.write("Lightning is the most common cause of wildfires in the United States. Lightning strikes can start fires in dry grass, brush, and trees. Lightning can also start fires in homes and other structures.")
+
         view_state = pdk.ViewState(
             latitude=float(longitude),
             longitude=float(latitude),
@@ -73,7 +74,7 @@ if option and not option == 'Select':
             data=df,
             get_position='[lon, lat]',
             get_color='[200, 30, 0, 160]',
-            get_radius=1000*10,
+            get_radius=1100*10,
         )
 
         #add the map to the streamlit app
@@ -83,7 +84,7 @@ if option and not option == 'Select':
             layers=[layer],
         ))
     elif option == 'Campire':
-        time.sleep(1)
+        time.sleep(3)
         st.write("Campfires are the second most common cause of wildfires in the United States. Campfires can start fires in dry grass, brush, and trees. Campfires can also start fires in homes and other structures.")
         view_state = pdk.ViewState(
             latitude=float(longitude),
@@ -108,7 +109,7 @@ if option and not option == 'Select':
             layers=[layer],
         ))
     elif option == 'Debris':
-        time.sleep(1)
+        time.sleep(3)
         st.write("Debris burning is the third most common cause of wildfires in the United States. Debris burning is the burning of yard waste, such as leaves, grass clippings, and tree branches. Debris burning can also include the burning of agricultural waste, such as corn stalks and hay.")
         view_state = pdk.ViewState(
             latitude=float(longitude),
@@ -133,7 +134,7 @@ if option and not option == 'Select':
             layers=[layer],
         ))
     elif option == 'Railroad':
-        time.sleep(1)
+        time.sleep(3)
         st.write("Railroad fires are the fourth most common cause of wildfires in the United States. Railroad fires can start fires in dry grass, brush, and trees. Railroad fires can also start fires in homes and other structures.")
         view_state = pdk.ViewState(
             latitude=float(longitude),
@@ -158,7 +159,7 @@ if option and not option == 'Select':
             layers=[layer],
         ))
     elif option == 'Powerline':
-        time.sleep(1)
+        time.sleep(3)
         st.write("Powerline fires are the fifth most common cause of wildfires in the United States. Powerline fires can start fires in dry grass, brush, and trees. Powerline fires can also start fires in homes and other structures.")
         view_state = pdk.ViewState(
             latitude=float(longitude),
@@ -183,7 +184,7 @@ if option and not option == 'Select':
             layers=[layer],
         ))
     elif option == 'Structure':
-        time.sleep(1)
+        time.sleep(3)
         st.write("Structure fires are the sixth most common cause of wildfires in the United States. Structure fires can start fires in dry grass, brush, and trees. Structure fires can also start fires in homes and other structures.")
         view_state = pdk.ViewState(
             latitude=float(longitude),
@@ -208,7 +209,7 @@ if option and not option == 'Select':
             layers=[layer],
         ))
     elif option == 'Equipment':
-        time.sleep(1)
+        time.sleep(3)
         st.write("Equipment fires are the seventh most common cause of wildfires in the United States. Equipment fires can start fires in dry grass, brush, and trees. Equipment fires can also start fires in homes and other structures.")
         view_state = pdk.ViewState(
             latitude=float(longitude),
@@ -233,7 +234,7 @@ if option and not option == 'Select':
             layers=[layer],
         ))
     elif option == 'Smoking':
-        time.sleep(1)
+        time.sleep(3)
         st.write("Smoking is the eighth most common cause of wildfires in the United States. Smoking can start fires in dry grass, brush, and trees. Smoking can also start fires in homes and other structures.")
         view_state = pdk.ViewState(
             latitude=float(longitude),

@@ -89,6 +89,8 @@ with col1:
         st.write("Input image for location")
         uploaded_file = st.file_uploader("Choose a file", ['png', 'jpg'], True, label_visibility='collapsed')
         LABELS = ['Non secluded', 'Secluded']
+        area_number = 1
+
         # display image
         if uploaded_file is not None:
             #image path
@@ -107,6 +109,8 @@ with col1:
                     st.image(img, use_column_width=True)
                     # format f string to 3 decimal places
                     st.success(f"Secluded area detected! Detected with an accuracy of: {round(int(accuracy[0]*100), 4)}%")
+                    st.success(f"Area {str(area_number)} logged")
+                    area_number += 1
                     total_images.append(image)
                 else:
                     st.image(img, use_column_width=True)
@@ -130,6 +134,6 @@ with col2:
     if total_images:
         for i in range(len(total_images)):
             st.checkbox(f"Area {str(i+1)}")
-            notify("FireSafe", "Secluded area detected! Users near this location has been detected")
+            notify("FireSafe", "Notifying users in these areas")
 
 
