@@ -10,11 +10,13 @@ from win10toast import ToastNotifier
 import time
 import FireSafeDb as database
 
+# notification system using Toast
 def notify(title, message):
-    toaster = ToastNotifier()
+    toaster = ToastNotifier() # Create a toaster object
     toaster.show_toast(title, message, icon_path=None, duration=5, threaded=True)
     time.sleep(0.01)
 
+# background HTML markdown code
 page_bg_img = """
 <style>
 [data-testid='stAppViewContainer"] {
@@ -41,6 +43,8 @@ background_img = '''
 '''
 
 st.markdown(background_img, unsafe_allow_html=True)
+
+# configuration class for model and other parameters to be used 
 class CFG:
     PATH = 'models/Efnetb0BestLosses.pt'
     width = 500
@@ -49,6 +53,7 @@ class CFG:
 
 st.title('FireSafe')
 
+# API key for geoapify
 API_KEY = 'd40f2850435a4ea88e5c1d3736182c61'
 
 def autocomplete(parameters, API_KEY):
@@ -59,6 +64,7 @@ def autocomplete(parameters, API_KEY):
     return data
 
 # convert location to array
+# replace spaces with %20 and commas with %2C%20, encryption for URL to geoapify
 def location_to_array(location):
     location = location.replace(',', "%2C%20")
     location = location.replace(' ', "%20")
@@ -66,17 +72,20 @@ def location_to_array(location):
     return location
 
 col1, col3, col2 = st.columns(3, gap='large')
-total_images = []
+
 def load_image(image_path):
     image = Image.open(image_path)
     width, height = image.size
     return image, width, height
 
+# an array to store all images
+total_images = []
+# boolean to check if location is found
 found = False
 with col1:
     st.write('')
 
-    # input react js code here
+    # input react js code here in future
     location = st.text_input('Enter Location')
     if location:
         location = location_to_array(location)
@@ -104,7 +113,8 @@ with col1:
                     #find accuracy
                     accuracy = []
                     for i in range(len(preds)):
-                        if preds[i] == 1:
+                        # if prediction is 1, append the probability to accuracy
+                        if preds[i] == 1: 
                             accuracy.append(probability[i])
                     st.image(img, use_column_width=True)
                     # format f string to 3 decimal places

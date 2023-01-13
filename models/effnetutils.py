@@ -59,8 +59,7 @@ class LandDataset(torch.utils.data.Dataset):
         img_res = transforms['image']
     return img_res
 
-def convert_from_image_to_cv2(img: Image) -> np.ndarray:
-    return cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+
 
 class Net(nn.Module):
     def __init__(self, num_classes):
@@ -87,7 +86,10 @@ def get_transform(train):
         return A.Compose([
                             ToTensorV2(p=1.0)
                         ],)
-        
+
+def convert_from_image_to_cv2(img: Image) -> np.ndarray:
+    return cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+    
 def threshold(output):
     print("Thresholding")
     output = torch.sigmoid(output) # sigmoid function to convert to probability values to be between 0 and 1
