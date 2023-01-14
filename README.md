@@ -2,7 +2,9 @@
 
 ## Always be safe, wherever you are.
 
-<!-- [![GitHub license](https://img.shields.io/github/license/andyjianzhou/FireSafe?style=for-the-badge&logo=github)]( -->
+<p align="center">
+<img src="https://i.imgur.com/LLVy8F5.png"/>
+</p>
 
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/andyjianzhou/FireSafe?logo=github&style=for-the-badge)](https://github.com/andyjianzhou/) 
 [![GitHub last commit](https://img.shields.io/github/last-commit/andyjianzhou/FireSafe?style=for-the-badge&logo=git)](https://github.com/andyjianzhou/) 
@@ -28,22 +30,36 @@
     - The login page is where the user can login to their account. If they do not have an account, they can click the link to create an account.
     <!-- Insert image here later of a screenshot -->
 3. Main Firesafe page:
-- The main FireSafe page displays a map of the area and the current fire threat level. Users can also sign up for notifications and access a checklist of things to do in case of a fire.
-<!-- Insert image here later of a screenshot -->
+    - The main FireSafe page has a user input textbox, a checkbox on the side, and a interactive dashboard page
+    - ![image](https://i.imgur.com/MPSsZg5.png)
+
+    - Then the user can input the address of the location they want to check for secluded areas near a wild fire. To make the program as dynamic as possible, we actually reetrieve the real location that most response teams want, latitude and longitude
+    - ![image](https://i.imgur.com/MPSsZg5.png)
+
 4. Machine Learning Model
-- FireSafe uses a complex machine learning model to predict the path of a fire based on location and how it was started. This allows users to see on a map if they are within the fire risk zone.
-<!-- Insert image here later of a screenshot -->
+    - Then user/government can drag and drop **LARGE** quantities of images, from files, or folders of images to detect for secluded areas, and for missing areas. The program will then return the images that have secluded areas, and the images that have missing areas.
+    - Using an Efficientnet B0, and Efficientnet B4, two popular CNN neural network modeles to use. We can detect for secluded areas, and missing areas. The program will then return the images that have secluded areas, and the images that have missing areas.
+    - Integrating MlOps was no easy task. Had to plan out for
+        1. Obtaining the data
+        2. Cleaning the data
+        3. Training the model
+        4. Inferencing theh model
+        5. Deploying the model
+        6. Monitoring the model
+        8. Making sure model is of size and is preprocessed correctly
+    - ![image](https://i.imgur.com/eFloCb9.png)
+
 5. Evacuation Checklist
-- The evacuation checklist is a step-by-step guide for users to follow in case of a fire. It includes things like turning off gas and electricity, gathering important documents, and more. Users can also mark items as complete and receive reminders.
+    - The evacuation checklist is a step-by-step guide for users to follow in case of a fire. It includes things like turning off gas and electricity, gathering important documents, and more. Users can also mark items as complete and receive reminders.
+    - Then on the dashboard, it will create checkboxes for responders to check off, and then the program will automatically generate a checklist for responders to follow. It will send a notification to all users with the wepapp.
+
+5. Incoming Fire Detection plans
+    - FireSafe uses a complex machine learning model to predict the path of a fire based on location and how it was started. This allows users to see on a map if they are within the fire risk zone. This is in training and will be implemented in the future using Xgboosting.
+    - ![image](https://i.imgur.com/y6neKIG.png)
+
 <!-- Insert image here later of a screenshot -->
 6. Notifications
 - Users can sign up for notifications and receive alerts when there is a fire threat in their area. They can also choose to receive notifications via email or text message.
-<!-- Insert image here later of a screenshot -->
-7. User Profile
-- Users can access their profile to update their contact information and view their evacuation checklist progress. They can also view their notification settings and deactivate their account.
-<!-- Insert image here later of a screenshot -->
-8. Admin Interface
-- The admin interface allows authorized personnel to update fire threat levels, manage user accounts, and access analytics on the usage of the application.
 <!-- Insert image here later of a screenshot -->
 
 ## Getting Started
