@@ -47,9 +47,6 @@ class LandDataset(torch.utils.data.Dataset):
     return len(self.imgs)
 
   def __getitem__(self, idx):
-    #convert PIL image to opencv image
-    # img = self.imgs
-    # img = np.array(img)
     img = convert_from_image_to_cv2(self.imgs)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = cv2.resize(img, (self.width, self.height)).astype(np.float32)
@@ -89,7 +86,7 @@ def get_transform(train):
 
 def convert_from_image_to_cv2(img: Image) -> np.ndarray:
     return cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-    
+
 def threshold(output):
     print("Thresholding")
     output = torch.sigmoid(output) # sigmoid function to convert to probability values to be between 0 and 1
@@ -125,6 +122,3 @@ def get_predictions(image, width, height, model_path):
     print("Output: ", output) # the array contents the probability of each class
     img = torch_to_pil(img[0]) #convert to PIL image
     return img, output, probability
-    
-def convert_from_image_to_cv2(img: Image) -> np.ndarray:
-    return cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)

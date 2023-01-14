@@ -105,6 +105,7 @@ with col1:
             #image path
             for i, uploaded_file in enumerate(uploaded_file):
                 image, width, height = load_image(uploaded_file)
+                # get model predictions and image 
                 img, preds, probability = get_predictions(image, CFG.width, CFG.height, CFG.PATH)
                 print(type(img))
                 st.write("Classifying...")
