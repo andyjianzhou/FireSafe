@@ -31,6 +31,8 @@
     <!-- Insert image here later of a screenshot -->
 3. Main Firesafe page:
     - The main FireSafe page has a user input textbox, a checkbox on the side, and a interactive dashboard page
+    - Purposely designed for a more minimalistic, modern approach
+    - Planning to add React to the project to make designs more versatile and advanced
     - ![image](https://i.imgur.com/MPSsZg5.png)
 
     - Then the user can input the address of the location they want to check for secluded areas near a wild fire. To make the program as dynamic as possible, we actually reetrieve the real location that most response teams want, latitude and longitude
@@ -39,7 +41,7 @@
 4. Machine Learning Model
     - Then user/government can drag and drop **LARGE** quantities of images, from files, or folders of images to detect for secluded areas, and for missing areas. The program will then return the images that have secluded areas, and the images that have missing areas.
     - Using an Efficientnet B0, and Efficientnet B4, two popular CNN neural network modeles to use. We can detect for secluded areas, and missing areas. The program will then return the images that have secluded areas, and the images that have missing areas.
-    - Integrating MlOps was no easy task. Had to plan out for
+    - Integrating MLOps was no easy task. Had to plan out for
         1. Obtaining the data
         2. Cleaning the data
         3. Training the model
