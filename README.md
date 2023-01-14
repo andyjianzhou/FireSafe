@@ -18,7 +18,7 @@
 ## FireSafe is an application designed to keep individuals in high risk areas updated on fires. It also ensures that no individual gets left behind in the event of a forest fire eruption. FireSafe uses complex machine learning to locate secluded locations and homes, allowing responders to go down a checklist of locations and ensure individuals are all aware of fire threat and prepared to evacuate.
 
 ## Video Demo:
-    [![FireSafe Demo](https://img.youtube.com/vi/1Q8fG0TdjSk/0.jpg)](https://youtu.be/G8i-fJkVXjM)
+[![FireSafe Demo](https://img.youtube.com/vi/1Q8fG0TdjSk/0.jpg)](https://youtu.be/G8i-fJkVXjM)
 
 ## Features and Interfaces:
 1. Landing Page
