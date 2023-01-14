@@ -2,7 +2,7 @@ import sqlite3
 
 class MyDatabase:
     def __init__(self, db):
-        self.conn = sqlite3.connect(db)
+        self.conn = sqlite3.connect(db, check_same_thread=False)
         self.cur = self.conn.cursor()
         self.cur.execute("CREATE TABLE IF NOT EXISTS address (id INTEGER PRIMARY KEY, address text)")
         self.conn.commit()
