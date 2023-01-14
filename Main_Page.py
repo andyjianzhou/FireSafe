@@ -18,7 +18,7 @@ class CFG:
     num_classes = 4
 
 def set_background():
-# background HTML markdown code
+    # background HTML markdown code
     page_bg_img = """
     <style>
     [data-testid='stAppViewContainer"] {
@@ -47,15 +47,16 @@ def set_background():
     st.markdown(background_img, unsafe_allow_html=True)
 
 
-
-st.title('FireSafe')
-
-
 # API key for geoapify
 class API:
+    """
+
+    Args:  API_KEY (str): API key for geoapify
+    """
     def __init__(self, API_KEY):
         self.API_KEY = API_KEY
 
+    # Processing data from geoapify API
     def autocomplete(self, parameters):
         get_URL = f"https://api.geoapify.com/v1/geocode/search?text={parameters}&format=json&apiKey={self.API_KEY}"
         response = requests.get(get_URL)
@@ -71,23 +72,27 @@ class API:
         print(location)
         return location
 
+# load image
 def load_image(image_path):
         image = Image.open(image_path)
         width, height = image.size
         return image, width, height
 
-# notification system using Toast
+# notification
 def notify(title, message):
     toaster = ToastNotifier() # Create a toaster object
     toaster.show_toast(title, message, icon_path=None, duration=5, threaded=True)
     time.sleep(0.01)
 
-if __name__ == '__main__':
-    set_background()
+# Main driver code
+def run_app():
     API_KEY = 'd40f2850435a4ea88e5c1d3736182c61'
     api = API(API_KEY)
+
+    st.title('FireSafe')
+
     col1, col3, col2 = st.columns(3, gap='large')
-    # an array to store all images
+    # list to store images
     total_images = []
     # boolean to check if location is found
     found = False
@@ -103,7 +108,6 @@ if __name__ == '__main__':
             address = location['results'][0]['address_line2']
             found = True
 
-        if location:
             st.write("Input image for location")
             uploaded_file = st.file_uploader("Choose a file", ['png', 'jpg'], True, label_visibility='collapsed')
             LABELS = ['Non secluded', 'Secluded']
@@ -133,7 +137,7 @@ if __name__ == '__main__':
                         area_number += 1
                         total_images.append(image)
                     else:
-                        st.image(img, use_column_width=True)
+                        st.image(img, width=width, use_column_width=True)
                         st.success(f"{LABELS[0]} area, search for other places, accuracy of {round(int(probability[0]*100), 4)}%")
                     # get predictions
                     st.write("")
@@ -150,12 +154,14 @@ if __name__ == '__main__':
             id = db.fetch()[0][0]
             db.delete(id)
             db.insert(location['results'][0]['lat'], location['results'][0]['lon'])
-            # Test to see if data is inserted and display all data
             # print(db.fetch())
-
         else:
             col2.header("No location found")
         if total_images:
             for i in range(len(total_images)):
                 st.checkbox(f"Area {str(i+1)}")
                 notify("FireSafe", "Notifying users in these areas")
+
+if __name__ == '__main__':
+    set_background()
+    run_app()
