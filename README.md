@@ -3,7 +3,7 @@
 ## Always be safe, wherever you are.
 
 <p align="center">
-<img src="https://i.imgur.com/LLVy8F5.png"/>
+    <img src="https://i.imgur.com/43jd460.png"/>
 </p>
 
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/andyjianzhou/FireSafe?logo=github&style=for-the-badge)](https://github.com/andyjianzhou/) 
@@ -17,15 +17,15 @@
 [![Issues](https://img.shields.io/github/issues/andyjianzhou/FireSafe?style=for-the-badge&label=Issues)](https://github.com/andyjianzhou/FireSafe)
 [![Watchers](	https://img.shields.io/github/watchers/andyjianzhou/FireSafe?label=Watch&style=for-the-badge)](https://github.com/andyjianzhou/FireSafe/)
 
-
-
 ## FireSafe is an application designed to keep individuals in high risk areas updated on fires. It also ensures that no individual gets left behind in the event of a forest fire eruption. FireSafe uses complex machine learning to locate secluded locations and homes, allowing responders to go down a checklist of locations and ensure individuals are all aware of fire threat and prepared to evacuate.
 
 
 ## Features and Interfaces:
 1. Landing Page
     - The landing page is the first page that the user sees when they open the application. It contains a brief description of the application and a button to get started.
-    <!-- Insert image here later of a screenshot -->
+    <p align="center">
+    <img src="https://i.imgur.com/tB6YgJx.png"/>
+    </p>
 2. Login Page
     - The login page is where the user can login to their account. If they do not have an account, they can click the link to create an account.
     <!-- Insert image here later of a screenshot -->
@@ -73,17 +73,17 @@ These instructions will get you a copy of the project up and running on your loc
 
 - Python 3.6 or higher
 - Pytorch
-- Efficientnet-b0
+- Efficientnet-b0 & Efficientnet-b4 
+- Efficientnet-b0 model weights
 - Nvidia Tesla P100
 - Streamlit
 - Typescript, React, and SQL
 
 
-
 ### Installing
 
 - Clone the repository
-git clone https://github.com/username/FireSafe.git
+git clone https://github.com/andyjianzhou/FireSafe
 
 ## Useful Links
 <!-- Create link for demo -->

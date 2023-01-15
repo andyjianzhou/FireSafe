@@ -18,6 +18,8 @@ class CFG:
     num_classes = 4
 
 def set_background():
+
+        
     # background HTML markdown code
     page_bg_img = """
     <style>
