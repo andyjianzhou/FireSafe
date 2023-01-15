@@ -47,7 +47,7 @@ def set_background():
     '''
 
     st.markdown(background_img, unsafe_allow_html=True)
-
+    st.sidebar.image('firesafelogo.png', width=300)
 
 # API key for geoapify
 class API:
@@ -115,16 +115,15 @@ def run_app():
             LABELS = ['Non secluded', 'Secluded']
             area_number = 1
 
-            # display image
             if uploaded_file is not None:
-                #image path
+                
                 for i, uploaded_file in enumerate(uploaded_file):
                     image, width, height = load_image(uploaded_file)
+
                     # get model predictions and image 
                     img, preds, probability = get_predictions(image, CFG.width, CFG.height, CFG.PATH)
                     print(type(img))
                     st.write("Classifying...")
-                    # convert tensor image to PIL image
                     if 1 in preds:
                         #find accuracy
                         accuracy = []
@@ -163,7 +162,6 @@ def run_app():
             for i in range(len(total_images)):
                 st.checkbox(f"Area {str(i+1)}")
                 notify("FireSafe", "Notifying users in these areas")
-
 if __name__ == '__main__':
     set_background()
     run_app()
