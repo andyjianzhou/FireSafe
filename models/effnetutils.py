@@ -117,7 +117,7 @@ def torch_to_pil(img):
     print(type(img))
     return transforms.ToPILImage()(img).convert('RGB')
 
-
+# Main prediction function
 def get_predictions(image, width, height, model_path):
     LABELS = ['Mali', 'Ethiopia', 'Malawi', 'Nigeria']
     model_path = model_path  # insert path to model
@@ -136,7 +136,7 @@ def get_predictions(image, width, height, model_path):
     img = img.unsqueeze(0)
     img = img.to(device)
     output = model(img)[0]
-    # output = output.cpu().detach().numpy()
+
     output, probability = threshold(output)
     # the array contents the probability of each class
     print("Output: ", output)
