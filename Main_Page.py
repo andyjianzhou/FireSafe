@@ -107,7 +107,7 @@ def run_app():
             location = api.location_to_API(location)
             location = api.autocomplete(location)
             st.write("Location found!")
-            address = location['results'][0]['address_line2']
+            # address = location['results'][0]['address_line2']
             found = True
 
             st.write("Input image for location")
@@ -147,7 +147,7 @@ def run_app():
         if found:
             # create database object and insert data 
             db = database.MyDatabase('Address.db')
-
+            address = location['results'][0]['address_line2']
             col2.header("Checklist")
             col2.subheader(address)
             col2.subheader(f"Latitude: {str(location['results'][0]['lat'])} Longitude: {str(location['results'][0]['lon'])}")
