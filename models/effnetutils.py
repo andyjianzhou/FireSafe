@@ -131,10 +131,15 @@ def get_predictions(image, width, height, model_path):
     model.eval()
     model.to(device)
 
+    # use main LandDataset class to preprocess the image for training
     imgs = LandDataset(image, width, height, transforms=get_transform(False))
+    # get the first image
     img = imgs[0]
+
+    # add a batch dimension, in this case it adds a dimension of 1 
+    # because there is only one image
     img = img.unsqueeze(0)
-    img = img.to(device)
+    img = img.to(device) 
     output = model(img)[0]
 
     output, probability = threshold(output)

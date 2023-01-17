@@ -100,50 +100,6 @@ val_df['Label'] = val_df['Label'].astype(int)
 print(train_df)
 train_df.Label.hist()
 
-
-
-# class LandDataset(torch.utils.data.Dataset):
-
-#     def __init__(self, images_dir, width, height, transforms=None):
-#         self.transforms = transforms
-#         self.images_dir = images_dir
-#         self.height = height
-#         self.width = width
-        
-#         # sorting the images for consistency
-#         # To get images, the extension of the filename is checked to be jpg
-#         self.imgs = [image for image in sorted(os.listdir(images_dir))]       
-#         # classes: 0 index is reserved for background
-#         self.classes = CFG.LABELS
-#     def __len__(self):
-#         return len(self.imgs)
-
-#     def __getitem__(self, idx):
-#         img_name = self.imgs[idx]
-#         image_id = torch.tensor([idx])
-#         target = [int(idx/len(image_id)>1)]
-#         file_path = os.path.join(self.images_dir, img_name)
-#         img = cv2.imread(file_path)
-#         img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB).astype(np.float32)
-#         img_res = cv2.resize(img_rgb, (self.width, self.height), cv2.INTER_AREA)
-#         img_res /= 255.0
-        
-#         labels = []
-#         for i in range(len(self.classes)):
-#             print(img_name)
-#             if self.classes[i] in img_name:
-#                 labels.append(i)
-#         # convert everything into a torch.Tensor
-#         labels = torch.as_tensor(labels, dtype=torch.int64)
-#         target = {}
-#         target["labels"] = labels
-        
-#         target["image_id"] = image_id
-
-#         if self.transforms:
-#             transforms = self.transforms(image = img_res) 
-#             img_res = transforms['image']
-#         return img_res, target
 class LandDataset(torch.utils.data.Dataset):
     def __init__(self, df, width, height, transforms=None):
         self.df = df
