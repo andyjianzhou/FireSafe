@@ -33,8 +33,7 @@ class LandDataset(torch.utils.data.Dataset):
         self.height = height
         self.width = width
 
-        # sorting the images for consistency
-        # To get images, the extension of the filename is checked to be jpg
+    # Needs to be implemented so that len(dataset) returns the size of the dataset, required by Pytorch
     def __len__(self):
         return len(self.imgs)
 
@@ -103,12 +102,15 @@ def convert_from_image_to_cv2(img: Image) -> np.ndarray:
 
 def threshold(output):
     print("Thresholding")
+
     # sigmoid function to convert to probability values to be between 0 and 1
     output = torch.sigmoid(output)
     probability = output
-    print(output)
     output = output.cpu().detach().numpy()
+
+    # threshold the output to 0 or 1, 0.999 is the threshold
     output = np.where(output > 0.999, 1, 0)
+
     return output, probability
 
 
@@ -122,10 +124,8 @@ def get_predictions(image, width, height, model_path):
     LABELS = ['Mali', 'Ethiopia', 'Malawi', 'Nigeria']
     model_path = model_path  # insert path to model
     model = Net(len(LABELS))
-    device = torch.device(
-        'cuda') if torch.cuda.is_available() else torch.device('cpu')
-    model.load_state_dict(torch.load(
-        model_path, map_location=device)['model_state_dict'])
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+    model.load_state_dict(torch.load(model_path, map_location=device)['model_state_dict'])
     print("Model loaded")
 
     model.eval()
@@ -145,5 +145,6 @@ def get_predictions(image, width, height, model_path):
     output, probability = threshold(output)
     # the array contents the probability of each class
     print("Output: ", output)
+    print("Probability: ", probability)
     img = torch_to_pil(img[0])  # convert to PIL image
     return img, output, probability

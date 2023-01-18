@@ -81,8 +81,8 @@ def load_image(image_path):
         return image, width, height
 
 # notification
-def notify(title, message):
-    toaster = ToastNotifier() # Create a toaster object
+def notify(toaster, title, message):
+    # Create a toaster object
     toaster.show_toast(title, message, icon_path=None, duration=5, threaded=True)
     time.sleep(0.01)
 
@@ -90,7 +90,7 @@ def notify(title, message):
 def run_app():
     API_KEY = 'd40f2850435a4ea88e5c1d3736182c61'
     api = API(API_KEY)
-
+    toaster = ToastNotifier()
     st.title('FireSafe')
 
     col1, col3, col2 = st.columns(3, gap='large')
@@ -125,24 +125,27 @@ def run_app():
                     print(type(img))
                     st.write("Classifying...")
                     if 1 in preds:
-                        #find accuracy
+
+                        #find accuracy by creating the list of only true 
                         accuracy = []
                         for i in range(len(preds)):
+                            
                             # if prediction is 1, append the probability to accuracy
                             if preds[i] == 1: 
                                 accuracy.append(probability[i])
                         st.image(img, use_column_width=True)
-                        # format f string to 3 decimal places
+
+                        # f string to 3 decimal places
+                        # Can also do this {str(int(accuracy[0]*100)))):0.3f}
                         st.success(f"Secluded area detected! Detected with an accuracy of: {round(int(accuracy[0]*100), 4)}%")
                         st.success(f"Area {str(area_number)} logged")
                         area_number += 1
                         total_images.append(image)
                     else:
                         st.image(img, width=width, use_column_width=True)
+                        # Success message for non secluded area
                         st.success(f"{LABELS[0]} area, search for other places, accuracy of {round(int(probability[0]*100), 4)}%")
-                    # get predictions
                     st.write("")
-
     with col2:
         if found:
             # create database object and insert data 
@@ -161,7 +164,7 @@ def run_app():
         if total_images:
             for i in range(len(total_images)):
                 st.checkbox(f"Area {str(i+1)}")
-                notify("FireSafe", "Notifying users in these areas")
+                notify(toaster, "FireSafe", "Notifying users in these areas")
 if __name__ == '__main__':
     set_background()
     run_app()
