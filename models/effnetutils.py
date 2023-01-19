@@ -12,7 +12,6 @@ from albumentations.pytorch.transforms import ToTensorV2
 # For example, running this (by clicking run or pressing Shift+Enter) will list all files under the input directory
 # xml library for parsing xml files
 import cv2
-import os.path
 
 
 class LandDataset(torch.utils.data.Dataset):
@@ -122,7 +121,7 @@ def torch_to_pil(img):
 # Main prediction function
 def get_predictions(image, width, height, model_path):
     LABELS = ['Mali', 'Ethiopia', 'Malawi', 'Nigeria']
-    model_path = model_path  # insert path to model
+      
     model = Net(len(LABELS))
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     model.load_state_dict(torch.load(model_path, map_location=device)['model_state_dict'])

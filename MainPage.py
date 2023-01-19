@@ -76,6 +76,7 @@ class API:
 
 # load image
 def load_image(image_path):
+        # Transforms image type bytes to PIL image
         image = Image.open(image_path)
         width, height = image.size
         return image, width, height
@@ -114,6 +115,8 @@ def run_app():
             found = True
 
             st.write("Input image for location")
+
+            # Uploaded_file returns type bytes
             uploaded_file = st.file_uploader("Choose a file", ['png', 'jpg'], True, label_visibility='collapsed')
             LABELS = ['Non secluded', 'Secluded']
             area_number = 1
