@@ -11,10 +11,6 @@ class MyDatabase:
         self.cur.execute("SELECT * FROM address")
         rows = self.cur.fetchall()
         return rows
-    def check(self, longitude, latitude):
-        self.cur.execute("SELECT * FROM address WHERE address=?", (str(longitude) + ", " + str(latitude),))
-        rows = self.cur.fetchall()
-        return rows
 
     def insert(self, longitude, latitude):
         # insert into table and remove duplicates
@@ -25,6 +21,12 @@ class MyDatabase:
         #delete longitude and latitude
         self.cur.execute("DELETE FROM address WHERE id=?", (id,))
         self.conn.commit()
-        
+    
+    def searchId(self, id):
+        #search longitude and latitude by id
+        self.cur.execute("SELECT * FROM address WHERE id=?", (id,))
+        rows = self.cur.fetchall()
+        return rows
+
     def __del__(self):
         self.conn.close()

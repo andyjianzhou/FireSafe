@@ -94,9 +94,11 @@ def run_app():
     st.title('FireSafe')
 
     col1, col3, col2 = st.columns(3, gap='large')
+
     # list to store images
     total_images = []
     # boolean to check if location is found
+
     found = False
     with col1:
         st.write('')
@@ -107,7 +109,8 @@ def run_app():
             location = api.location_to_API(location)
             location = api.autocomplete(location)
             st.write("Location found!")
-            # address = location['results'][0]['address_line2']
+
+            # Flag
             found = True
 
             st.write("Input image for location")
@@ -115,10 +118,11 @@ def run_app():
             LABELS = ['Non secluded', 'Secluded']
             area_number = 1
 
+            # Start of ML section
             if uploaded_file is not None:
                 
                 for i, uploaded_file in enumerate(uploaded_file):
-                    image, width, height = load_image(uploaded_file)
+                    image, width, _ = load_image(uploaded_file)
 
                     # get model predictions and image 
                     img, preds, probability = get_predictions(image, CFG.width, CFG.height, CFG.PATH)
@@ -127,12 +131,7 @@ def run_app():
                     if 1 in preds:
 
                         #find accuracy by creating the list of only true 
-                        accuracy = []
-                        for i in range(len(preds)):
-                            
-                            # if prediction is 1, append the probability to accuracy
-                            if preds[i] == 1: 
-                                accuracy.append(probability[i])
+                        accuracy = [probability[i] for i in range(len(preds)) if preds[i] == 1]
                         st.image(img, use_column_width=True)
 
                         # f string to 3 decimal places
@@ -154,6 +153,7 @@ def run_app():
             col2.header("Checklist")
             col2.subheader(address)
             col2.subheader(f"Latitude: {str(location['results'][0]['lat'])} Longitude: {str(location['results'][0]['lon'])}")
+            
             #get id of the first row
             id = db.fetch()[0][0]
             db.delete(id)
