@@ -63,7 +63,7 @@ class API:
         get_URL = f"https://api.geoapify.com/v1/geocode/search?text={parameters}&format=json&apiKey={self.API_KEY}"
         response = requests.get(get_URL)
         data = response.json()
-        # pprint.pprint(data)
+        pprint.pprint(data)
         return data
 
     # convert location to array
@@ -71,7 +71,7 @@ class API:
     def location_to_API(self, location):
         location = location.replace(',', "%2C%20")
         location = location.replace(' ', "%20")
-        print(location)
+        # print(location)
         return location
 
 # load image
@@ -152,9 +152,11 @@ def run_app():
         if found:
             # create database object and insert data 
             db = database.MyDatabase('Address.db')
-            address = location['results'][0]['address_line2']
+            address1 = location['results'][0]['address_line1']
+            address2 = location['results'][0]['address_line2']
             col2.header("Checklist")
-            col2.subheader(address)
+            col2.subheader(address1)
+            col2.subheader(address2)
             col2.subheader(f"Latitude: {str(location['results'][0]['lat'])} Longitude: {str(location['results'][0]['lon'])}")
             
             #get id of the first row

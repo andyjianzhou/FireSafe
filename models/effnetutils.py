@@ -121,7 +121,7 @@ def torch_to_pil(img):
 # Main prediction function
 def get_predictions(image, width, height, model_path):
     LABELS = ['Mali', 'Ethiopia', 'Malawi', 'Nigeria']
-      
+          
     model = Net(len(LABELS))
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     model.load_state_dict(torch.load(model_path, map_location=device)['model_state_dict'])
