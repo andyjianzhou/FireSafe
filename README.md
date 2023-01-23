@@ -78,6 +78,8 @@ These instructions will get you a copy of the project up and running on your loc
 - Nvidia Tesla P100
 - Streamlit
 - Typescript, React, and SQL
+- OpenCV
+- PILLOW
 
 
 ### Installing
