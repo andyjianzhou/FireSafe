@@ -158,7 +158,7 @@ def run_app():
             col2.subheader(address1)
             col2.subheader(address2)
             col2.subheader(f"Latitude: {str(location['results'][0]['lat'])} Longitude: {str(location['results'][0]['lon'])}")
-            
+        
             #get id of the first row
             id = db.fetch()[0][0]
             db.delete(id)
